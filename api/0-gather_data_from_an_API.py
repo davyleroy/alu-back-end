@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-        print(f"Failed to retrieve TODO list for employee {employee_id}.")
-n script that returns TODO list progress for a given employee ID
+python script that returns TODO list progress for a given employee ID
 """
 import requests
 import json
