@@ -1,27 +1,27 @@
-#!/usr/bin/python3
-"""
-python script that returns TODO list progress for a given employee ID
-"""
-import requests
-import json
 
+#!/usr/bin/python3
+"""Module to gather data from an API"""
+
+import requests
+import sys
 
 if __name__ == "__main__":
-    response = requests.get(f'https://jsonplaceholder.typicode.com/users/{employee_id}/todos')
+    if len(sys.argv) > 1 and sys.argv[1].isdigit():
+        user_id = sys.argv[1]
+        url = "https://jsonplaceholder.typicode.com/users/{}".format(user_id)
 
-    if response.status_code == 200:
-        todos = response.json()
-
-        completed_tasks = [todo for todo in todos if todo['completed']]
-
-        employee_name = todos[0]['username']
-        number_of_done_tasks = len(completed_tasks)
-        total_number_of_tasks = len(todos)
-
-        print(f"Employee {employee_name} is done with tasks ({number_of_done_tasks}/{total_number_of_tasks}):")
-
-        for task in completed_tasks:
-            print(f"\t{task['title']}")
-
+        response = requests.get(url)
+        if response.status_code == 200:
+            user = response.json()
+            todos_response = requests.get('{}/todos'.format(url))
+            if todos_response.status_code == 200:
+                todos = todos_response.json()
+                done_tasks = [task for task in todos if task.get('completed') is True]
+                total_tasks = len(todos)
+                print("Employee {} is done with tasks({}/{}):".format(user.get('name'), len(done_tasks), total_tasks))
+                for task in done_tasks:
+                    print("\t {}".format(task.get('title')))
+        else:
+            print("User not found.")
     else:
-        print(f"Failed to retrieve TODO list for employee {employee_id}.")
+        print("Usage: ./0-gather_data_from_an_API.py <employee ID>")
