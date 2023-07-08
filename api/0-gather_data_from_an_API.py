@@ -2,6 +2,8 @@
 #!/usr/bin/python3
 # Module to gather data from an API
 
+"""Module to gather data from an API"""
+
 import requests
 import sys
 
