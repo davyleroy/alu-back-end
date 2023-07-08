@@ -1,30 +1,30 @@
 
 #!/usr/bin/python3
-# Module to gather data from an API
-
-"""Module to gather data from an API"""
+"""Module"""
 
 import requests
 import sys
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1].isdigit():
-        user_id = sys.argv[1]
-        url = "https://jsonplaceholder.typicode.com/users/{}".format(user_id)
+"""Module"""
 
-        response = requests.get(url)
-        if response.status_code == 200:
-            user = response.json()
-            todos_response = requests.get('{}/todos'.format(url))
-            if todos_response.status_code == 200:
-                todos = todos_response.json()
-                done_tasks = [task for task in todos if task.get('completed') is True]
-                total_tasks = len(todos)
-                print("Employee {} is done with tasks({}/{}):"
-                      .format(user.get('name'), len(done_tasks), total_tasks))
-                for task in done_tasks:
-                    print("\t {}".format(task.get('title')))
-        else:
-            print("User not found.")
-    else:
-        print("Usage: ./0-gather_data_from_an_API.py <employee ID>")
+if __name__ == '__main__':
+    """IF SCRIPT IS NOT RUN AS MODULE"""
+    employee_id = sys.argv[1]
+    user_url = "https://jsonplaceholder.typicode.com/users/{}" \
+        .format(employee_id)
+    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos/" \
+        .format(employee_id)
+
+    user_info = requests.get(user_url).json()
+    todos_info = requests.get(todos_url).json()
+
+    employee_name = user_info["name"]
+    task_completed = list(filter(lambda obj:
+                                 (obj["completed"] is True), todos_info))
+    number_of_done_tasks = len(task_completed)
+    total_number_of_tasks = len(todos_info)
+
+    print("Employee {} is done with tasks({}/{}):".
+          format(employee_name, number_of_done_tasks, total_number_of_tasks))
+
+    [print("\t " + task["title"]) for task in task_completed]
