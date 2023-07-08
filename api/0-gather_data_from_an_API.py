@@ -1,6 +1,6 @@
 
 #!/usr/bin/python3
-"""Module to gather data from an API"""
+# Module to gather data from an API
 
 import requests
 import sys
@@ -18,7 +18,8 @@ if __name__ == "__main__":
                 todos = todos_response.json()
                 done_tasks = [task for task in todos if task.get('completed') is True]
                 total_tasks = len(todos)
-                print("Employee {} is done with tasks({}/{}):".format(user.get('name'), len(done_tasks), total_tasks))
+                print("Employee {} is done with tasks({}/{}):"
+                      .format(user.get('name'), len(done_tasks), total_tasks))
                 for task in done_tasks:
                     print("\t {}".format(task.get('title')))
         else:
