@@ -19,4 +19,3 @@ if __name__ == "__main__":
     json_data = json.dumps({"{}".format(user["id"]): data})
     with open("{}.json".format(user["id"]), 'w', encoding='utf-8') as f:
         f.write(json_data)
-
